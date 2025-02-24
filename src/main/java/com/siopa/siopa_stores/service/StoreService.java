@@ -1,5 +1,7 @@
 package com.siopa.siopa_stores.service;
 
+import com.siopa.siopa_stores.kafka.OwnerRoleUpdateEvent;
+import com.siopa.siopa_stores.kafka.KafkaProducerService;
 import com.siopa.siopa_stores.models.Store;
 import com.siopa.siopa_stores.repositories.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import java.util.UUID;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public List<Store> getAllStores() {
         return storeRepository.findAll();
@@ -59,8 +62,15 @@ public class StoreService {
     @Transactional
     public Store addOwnerToStore(UUID storeId, UUID ownerId) {
         return storeRepository.findById(storeId).map(store -> {
-            store.getOwnerIds().add(ownerId);
-            return storeRepository.save(store);
+            if (!store.getOwnerIds().contains(ownerId)) {
+                store.getOwnerIds().add(ownerId);
+                storeRepository.save(store);
+
+                // 🔹 Produce Kafka Event
+                OwnerRoleUpdateEvent event = new OwnerRoleUpdateEvent(ownerId, "OWNER");
+                kafkaProducerService.sendRoleUpdateMessage(event);
+            }
+            return store;
         }).orElseThrow(() -> new RuntimeException("Store not found"));
     }
 
