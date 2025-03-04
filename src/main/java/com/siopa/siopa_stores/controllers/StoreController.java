@@ -1,8 +1,10 @@
 package com.siopa.siopa_stores.controllers;
 
 import com.siopa.siopa_stores.models.Store;
+import com.siopa.siopa_stores.requests.LocationRequest;
 import com.siopa.siopa_stores.service.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -63,5 +65,15 @@ public class StoreController {
     @GetMapping("/owner/{ownerId}")
     public ResponseEntity<List<Store>> getStoresByOwner(@PathVariable UUID ownerId) {
         return ResponseEntity.ok(storeService.getStoresByOwner(ownerId));
+    }
+    @PostMapping("/nearby")
+    public ResponseEntity<?> getNearbyStores(@RequestBody LocationRequest locationRequest) {
+        List<Store> stores = storeService.findStoresByLatLng(locationRequest);
+
+        if (stores.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sorry, there are no stores in your area.");
+        }
+
+        return ResponseEntity.ok(stores);
     }
 }

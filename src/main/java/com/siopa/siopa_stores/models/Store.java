@@ -6,6 +6,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
@@ -54,4 +55,12 @@ public class Store {
     @CollectionTable(name = "store_owners", joinColumns = @JoinColumn(name = "store_id"))
     @Column(name = "owner_id")
     private List<UUID> ownerIds;
+
+    @NotNull
+    @Column(name="latitude")
+    private double latitude;
+
+    @NotNull
+    @Column(name="longitude")
+    private double longitude;
 }
