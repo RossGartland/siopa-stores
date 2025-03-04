@@ -100,7 +100,7 @@ public class StoreService {
         List<Store> nearbyStores = new ArrayList(); //Initialize an empty list to store valid stores.
         double distanceCalculated; //The distance between 2 points.
         for (Store store: storeList) {
-            distanceCalculated = distanceHelper.distanceCalculation(store.getLatitude(), locationRequest.lat, store.getLongitude(), locationRequest.lng); //Calculate the distance.
+            distanceCalculated = distanceHelper.distanceCalculation(store.getLatitude(), locationRequest.latitude, store.getLongitude(), locationRequest.longitude); //Calculate the distance.
             if(distanceCalculated < 10) {
                 nearbyStores.add(store); //Add store to list if it is within a distance.
             }
