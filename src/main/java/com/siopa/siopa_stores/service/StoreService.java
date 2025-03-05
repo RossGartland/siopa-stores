@@ -54,6 +54,8 @@ public class StoreService {
             store.setPhoneNumber(updatedStore.getPhoneNumber());
             store.setEmail(updatedStore.getEmail());
             store.setOwnerIds(updatedStore.getOwnerIds());
+            store.setDeliveryFee(updatedStore.getDeliveryFee());
+            store.setStoreType(updatedStore.getStoreType());
             return storeRepository.save(store);
         }).orElseThrow(() -> new RuntimeException("Store not found"));
     }

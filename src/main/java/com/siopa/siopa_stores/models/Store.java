@@ -8,6 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,4 +64,13 @@ public class Store {
     @NotNull
     @Column(name="longitude")
     private double longitude;
+
+    @Column(name="store_type")
+    private String storeType;
+
+    @Column(name="rating")
+    private int rating;
+
+    @Column(name="delivery_fee")
+    private BigDecimal deliveryFee;
 }
